@@ -1,11 +1,17 @@
+
 "use client";
 
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { IBook } from "@/booktypes";
 
-const BookCard = ({ book }) => {
-  if (!book) return null; // ✅ extra safety
+interface IBookCardProps {
+  book: IBook;
+}
+
+const BookCard = ({ book }: IBookCardProps) => {
+  if (!book) return null;
 
   return (
     <div
@@ -28,7 +34,8 @@ const BookCard = ({ book }) => {
 
         {/* Rating */}
         <div className="absolute right-4 top-4 rounded-full bg-slate-900/85 px-3 py-1 text-sm font-semibold text-white">
-          <span className="text-yellow-400">★</span> {book.rating}
+          <span className="text-yellow-400">★</span>{" "}
+          {book.rating}
         </div>
       </div>
 
@@ -37,11 +44,14 @@ const BookCard = ({ book }) => {
         <h2 className="line-clamp-2 text-xl font-bold text-slate-800">
           {book.bookName}
         </h2>
-        <p className="mt-2 text-sm text-slate-500">By {book.author}</p>
+
+        <p className="mt-2 text-sm text-slate-500">
+          By {book.author}
+        </p>
 
         {/* Tags */}
         <div className="mt-4 flex flex-wrap gap-2">
-          {book.tags?.map((tag) => (
+          {book.tags?.map((tag: string) => (
             <span
               key={tag}
               className="rounded-md bg-indigo-50 px-2 py-1 text-xs text-indigo-600"
@@ -55,19 +65,26 @@ const BookCard = ({ book }) => {
         <div className="mt-4 flex justify-between border-y border-slate-100 py-4">
           <div>
             <p className="text-xs text-slate-400">Pages</p>
-            <p className="font-semibold text-slate-700">{book.totalPages}</p>
+            <p className="font-semibold text-slate-700">
+              {book.totalPages}
+            </p>
           </div>
+
           <div>
             <p className="text-xs text-slate-400">Published</p>
-            <p className="font-semibold text-slate-700">{book.yearOfPublishing}</p>
+            <p className="font-semibold text-slate-700">
+              {book.yearOfPublishing}
+            </p>
           </div>
         </div>
 
         {/* Button */}
-        <Link href={`/books/${book.bookId}`}><button className="mt-5 w-full rounded-xl bg-indigo-600
-         py-3 font-semibold text-white transition hover:bg-indigo-700">
+        <Link
+          href={`/books/${book.bookId}`}
+          className="mt-5 block w-full rounded-xl bg-indigo-600 py-3 text-center font-semibold text-white transition hover:bg-indigo-700"
+        >
           View Details →
-        </button></Link>
+        </Link>
       </div>
     </div>
   );

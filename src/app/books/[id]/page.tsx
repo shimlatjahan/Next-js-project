@@ -2,16 +2,8 @@
 
 import ReadButton from "@/components/BooksDetails/ReadButton";
 import WishlistButton from "@/components/BooksDetails/wishlist";
+import { IBook } from "@/booktypes";
 import Image from "next/image";
-
-interface IBook {
-  bookId: number;
-  bookName: string;
-  author: string;
-  bookType: string;
-  description: string;
-  image: string;
-}
 
 interface IBookDetailsPageProps {
   params: Promise<{
@@ -20,18 +12,25 @@ interface IBookDetailsPageProps {
 }
 
 const getBooks = async (): Promise<IBook[]> => {
-  const response = await fetch(
-    "http://localhost:3000/booksData.json",
-    {
-      cache: "no-store",
+  try {
+    const response = await fetch(
+      "http://localhost:3000/booksData.json",
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch books data");
     }
-  );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch books data");
+    const data: IBook[] = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    return [];
   }
-
-  return response.json();
 };
 
 const BookDetailsPage = async ({
@@ -42,7 +41,7 @@ const BookDetailsPage = async ({
   const booksData = await getBooks();
 
   const book = booksData.find(
-    (b: IBook) => String(b.bookId) === String(id)
+    (b) => String(b.bookId) === String(id)
   );
 
   // Book not found
@@ -100,10 +99,10 @@ const BookDetailsPage = async ({
             {book.author}
           </p>
 
-          {/* Book Type - Below Author */}
+          {/* Book Type */}
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 ring-1 ring-inset ring-indigo-100">
-              📚 {book.bookType}
+              📚 {book.bookName}
             </span>
           </div>
 
@@ -117,14 +116,14 @@ const BookDetailsPage = async ({
             </h3>
 
             <p className="text-base leading-8 text-base-content/70">
-              {book.description}
+              {book.category}
             </p>
           </div>
 
-          {/* Listen Button */}
+          {/* Buttons */}
           <div className="card-actions mt-4">
-            <ReadButton book={book}></ReadButton>
-            <WishlistButton book={book}></WishlistButton>
+            <ReadButton book={book} />
+            <WishlistButton book={book} />
           </div>
 
         </div>

@@ -1,3 +1,4 @@
+
 import React from "react";
 import BookCard from "@/components/shared/BookCard";
 import { IBook } from "@/booktypes";
@@ -30,7 +31,7 @@ const getBooks = async (): Promise<IBook[]> => {
 const Books = async () => {
   const booksData = await getBooks();
 
-  if (!booksData || booksData.length === 0) {
+  if (booksData.length === 0) {
     return (
       <p className="text-center text-red-500">
         No books found!
@@ -55,7 +56,7 @@ const Books = async () => {
       {/* Books Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
-        {booksData.map((book: IBook) => (
+        {booksData.map((book) => (
           <BookCard
             key={book.bookId}
             book={book}
